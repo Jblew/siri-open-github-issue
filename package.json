@@ -1,0 +1,16 @@
+{
+  "name": "siri-open-github-issue",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "run": "ts-node src/index.ts"
+  },
+  "author": "Jędrzej Bogumił JB Lewandowski <jedrzejblew@gmail.com>",
+  "license": "GGPLv3",
+  "devDependencies": {
+    "@types/node": "^16.11.6",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  }
+}
