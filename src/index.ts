@@ -16,6 +16,7 @@ process
 const port = parseInt(process.env.PORT || "80");
 
 const issueMaker = new GithubIssueMaker({
+  owner: envMust("OWNER"),
   repo: envMust("REPO"),
   token: envMust("TOKEN"),
   projectNumber: parseInt(envMust("PROJECT_NUMBER")),
