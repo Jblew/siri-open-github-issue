@@ -14,7 +14,7 @@ process
   });
 
 const port = parseInt(process.env.PORT || "80");
-
+const uniqueURLPrefix = envMust("UNIQUE_URL_PREFIX");
 const issueMaker = new GithubIssueMaker({
   owner: envMust("OWNER"),
   repo: envMust("REPO"),
@@ -24,7 +24,7 @@ const issueMaker = new GithubIssueMaker({
 const server = new HttpBackendServer({
   port,
 });
-server.get("/open-issue", async ({ query }) => {
+server.get(`/${uniqueURLPrefix}/open-issue`, async ({ query }) => {
   const message = query.message;
   if (!message) return "Missing message";
   const { number } = await issueMaker.createIssue({ title: message });
