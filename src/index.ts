@@ -1,4 +1,7 @@
 import { HttpBackendServer } from "./HttpBackendServer";
+import { createTokenAuth } from "@octokit/auth-token";
+import { GithubIssueMaker } from "./GithubIssueMaker";
+import { envMust } from "./util";
 
 process
   .on("SIGINT", function () {
@@ -11,15 +14,19 @@ process
   });
 
 const port = parseInt(process.env.PORT || "80");
-const repo = process.env.REPO;
 
+const issueMaker = new GithubIssueMaker({
+  repo: envMust("REPO"),
+  token: envMust("TOKEN"),
+  projectNumber: parseInt(envMust("PROJECT_NUMBER")),
+});
 const server = new HttpBackendServer({
   port,
 });
 server.get("/open-issue", async ({ query }) => {
   const message = query.message;
   if (!message) return "Missing message";
-  const no = 1;
-  return `Created issue ${message} with number ${no}`;
+  const { number } = await issueMaker.createIssue({ title: message });
+  return `Created issue ${message} with number ${number}`;
 });
 server.listen();
