@@ -18,7 +18,7 @@ const uniqueURLPrefix = envMust("UNIQUE_URL_PREFIX");
 const issueMaker = new GithubIssueMaker({
   owner: envMust("OWNER"),
   repo: envMust("REPO"),
-  token: envMust("TOKEN"),
+  token: envMust("GITHUB_TOKEN"),
   projectNumber: parseInt(envMust("PROJECT_NUMBER")),
 });
 const server = new HttpBackendServer({
