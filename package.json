@@ -4,7 +4,8 @@
   "description": "",
   "private": true,
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "author": "Jędrzej Bogumił JB Lewandowski <jedrzejblew@gmail.com>",
   "license": "GGPLv3",
