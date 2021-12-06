@@ -14,7 +14,7 @@ process
   });
 
 const port = parseInt(process.env.PORT || "80");
-const uniqueURLPrefix = envMust("UNIQUE_URL_PREFIX");
+const apiKeyForClients = envMust("APIKEY_FOR_CLIENTS");
 const issueMaker = new GithubIssueMaker({
   owner: envMust("OWNER"),
   repo: envMust("REPO"),
@@ -24,7 +24,10 @@ const issueMaker = new GithubIssueMaker({
 const server = new HttpBackendServer({
   port,
 });
-server.get(`/${uniqueURLPrefix}/open-issue`, async ({ query }) => {
+server.get(`/open-issue`, async ({ query }) => {
+  const apiKey = query.key;
+  if (!apiKey) return "Missing key";
+  else if (apiKey !== apiKeyForClients) return "Invalid api key";
   const message = query.message;
   if (!message) return "Missing message";
   const { number } = await issueMaker.createIssue({ title: message });
