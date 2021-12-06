@@ -3,5 +3,11 @@ services:
   server:
     build: .
     command: npm run start
+    environment:
+      APIKEY_FOR_CLIENTS: "inmysecretlife123"
+      OWNER: Jblew
+      REPO: ephemeris
+      GITHUB_TOKEN: "Personal access token"
+      PROJECT_NUMBER: 1230987
     ports:
       - 8080:80
