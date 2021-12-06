@@ -12,8 +12,7 @@ process
     console.log("\nGracefully shutting down from SIGTERM");
     process.exit(1);
   });
-
-const port = parseInt(process.env.PORT || "80");
+console.log("siri-open-github-issue");
 const apiKeyForClients = envMust("APIKEY_FOR_CLIENTS");
 const issueMaker = new GithubIssueMaker({
   owner: envMust("OWNER"),
@@ -22,7 +21,8 @@ const issueMaker = new GithubIssueMaker({
   projectColumnId: parseInt(envMust("PROJECT_COLUMN_ID")),
 });
 const server = new HttpBackendServer({
-  port,
+  port: parseInt(process.env.PORT || "80"),
+  hostname: process.env.HOST || "0.0.0.0",
 });
 server.get(`/open-issue`, async ({ query }) => {
   const apiKey = query.key;

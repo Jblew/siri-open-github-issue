@@ -3,7 +3,9 @@ import morgan from "morgan";
 
 export class HttpBackendServer {
   private app: express.Application;
-  constructor(private config: { port: number; silent?: boolean }) {
+  constructor(
+    private config: { port: number; hostname?: string; silent?: boolean }
+  ) {
     this.app = this.makeExpressApp();
   }
 
@@ -24,7 +26,8 @@ export class HttpBackendServer {
 
   listen(): { close(): void; address(): string | null | any } {
     const port = this.config.port || 80;
-    const httpServer = this.app.listen(port, () => {
+    const hostname = this.config.hostname || "0.0.0.0";
+    const httpServer = this.app.listen(port, hostname, () => {
       console.log(`Listening at :${port}`);
     });
     return httpServer;
