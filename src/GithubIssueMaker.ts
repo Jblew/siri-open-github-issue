@@ -8,7 +8,7 @@ export class GithubIssueMaker {
       token: string;
       repo: string;
       owner: string;
-      projectNumber: number;
+      projectColumnId?: number;
     }
   ) {
     this.octokit = new Octokit({
@@ -17,12 +17,27 @@ export class GithubIssueMaker {
   }
 
   async createIssue({ title }: { title: string }) {
+    const { number, id } = await this.doCreateIssue({ title });
+    if (this.config.projectColumnId) {
+      await this.addIssueToProject({ issueID: id });
+    }
+    return { number };
+  }
+
+  private async doCreateIssue({ title }: { title: string }) {
     const resp = await this.octokit.issues.create({
       title,
       repo: this.config.repo,
       owner: this.config.owner,
     });
-    const number = resp.data;
-    return { number };
+    return { number: resp.data.number, id: resp.data.id };
+  }
+
+  private async addIssueToProject({ issueID }: { issueID: number }) {
+    await this.octokit.projects.createCard({
+      column_id: this.config.projectColumnId!,
+      content_type: "issue",
+      content_id: issueID,
+    });
   }
 }

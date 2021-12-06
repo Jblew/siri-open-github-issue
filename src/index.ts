@@ -19,7 +19,7 @@ const issueMaker = new GithubIssueMaker({
   owner: envMust("OWNER"),
   repo: envMust("REPO"),
   token: envMust("GITHUB_TOKEN"),
-  projectNumber: parseInt(envMust("PROJECT_NUMBER")),
+  projectColumnId: parseInt(envMust("PROJECT_COLUMN_ID")),
 });
 const server = new HttpBackendServer({
   port,
