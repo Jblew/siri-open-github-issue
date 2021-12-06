@@ -21,17 +21,29 @@ jobs:
     permissions:
       contents: read
       packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        registry: ["github", "docker"]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Log in to the Container registry
+      - name: Log in to the Github container registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        if: matrix.registry == 'github'
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Log in to the Docker hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        if: matrix.registry == 'docker'
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
