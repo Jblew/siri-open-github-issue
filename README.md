@@ -35,6 +35,7 @@ services:
       REPO: ephemeris # Repository name
       GITHUB_TOKEN: "" # You Github Personal Access Token
       PROJECT_COLUMN_ID: 764 ## Id of a column in Github project (below instructions on how to find it)
+      ROUTER_BASE: ""
     ports:
       - 8080:80
 ```
@@ -58,7 +59,7 @@ gcloud beta run deploy "${SERVICE_NAME}" \
             --region "${GCP_REGION_CLOUDRUN}" \
             --image "${TARGET_IMAGE}" \
             --allow-unauthenticated \
-            --set-env-vars="APIKEY_FOR_CLIENTS=${APIKEY_FOR_CLIENTS},OWNER=${OWNER},REPO=${REPO},GITHUB_TOKEN=${GITHUB_TOKEN},PROJECT_COLUMN_ID=${PROJECT_COLUMN_ID}"
+            --set-env-vars="APIKEY_FOR_CLIENTS=${APIKEY_FOR_CLIENTS},OWNER=${OWNER},REPO=${REPO},GITHUB_TOKEN=${GITHUB_TOKEN},PROJECT_COLUMN_ID=${PROJECT_COLUMN_ID},ROUTER_BASE=${ROUTER_BASE}"
 ```
 
 Below are instruction on how to set up service accont for github actions + GCP cloud run + GCP Artifact repository
