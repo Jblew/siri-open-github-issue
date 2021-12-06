@@ -1,5 +1,5 @@
-import { createTokenAuth } from "@octokit/auth-token";
 import { Octokit } from "@octokit/rest";
+import { sleepMs } from "./util";
 export class GithubIssueMaker {
   private octokit: Octokit;
 
@@ -12,13 +12,14 @@ export class GithubIssueMaker {
     }
   ) {
     this.octokit = new Octokit({
-      authStrategy: createTokenAuth(config.token),
+      auth: config.token,
     });
   }
 
   async createIssue({ title }: { title: string }) {
     const { number, id } = await this.doCreateIssue({ title });
     if (this.config.projectColumnId) {
+      await sleepMs(1000);
       await this.addIssueToProject({ issueID: id });
     }
     return { number };
@@ -36,7 +37,7 @@ export class GithubIssueMaker {
   private async addIssueToProject({ issueID }: { issueID: number }) {
     await this.octokit.projects.createCard({
       column_id: this.config.projectColumnId!,
-      content_type: "issue",
+      content_type: "Issue",
       content_id: issueID,
     });
   }
