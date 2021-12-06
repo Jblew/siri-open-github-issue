@@ -25,9 +25,9 @@ jobs:
             registry_domain: ghcr.io
           - registry: docker
             registry_domain: docker.io
-      env:
-        REGISTRY: ${{ matrix.registry_domain }}
-        IMAGE_NAME: ${{ github.repository }}
+    env:
+      REGISTRY: ${{ matrix.registry_domain }}
+      IMAGE_NAME: ${{ github.repository }}
 
     steps:
       - name: Checkout repository
