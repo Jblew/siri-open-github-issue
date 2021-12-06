@@ -23,6 +23,7 @@ const issueMaker = new GithubIssueMaker({
 const server = new HttpBackendServer({
   port: parseInt(process.env.PORT || "80"),
   hostname: process.env.HOST || "0.0.0.0",
+  routerBase: process.env.ROUTER_BASE || "",
 });
 server.get(`/open-issue`, async ({ query }) => {
   const apiKey = query.key;

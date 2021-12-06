@@ -1,19 +1,29 @@
 import express from "express";
 import morgan from "morgan";
+import * as path from "path";
 
 export class HttpBackendServer {
   private app: express.Application;
   constructor(
-    private config: { port: number; hostname?: string; silent?: boolean }
+    private config: {
+      port: number;
+      hostname?: string;
+      routerBase: string;
+      silent?: boolean;
+    }
   ) {
     this.app = this.makeExpressApp();
   }
 
   get(
-    path: string,
+    endpointPath: string,
     handler: (p: { query: Record<string, any> }) => Promise<string>
   ) {
-    this.app.get(path, async (req, res) => {
+    const endpointPathResolved = path.join(
+      this.config.routerBase,
+      endpointPath
+    );
+    this.app.get(endpointPathResolved, async (req, res) => {
       try {
         const result = await handler({ query: req.query });
         res.status(200).send(result);
