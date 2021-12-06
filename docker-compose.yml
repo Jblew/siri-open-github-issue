@@ -8,6 +8,6 @@ services:
       OWNER: Jblew
       REPO: ephemeris
       GITHUB_TOKEN: "Personal access token"
-      PROJECT_NUMBER: 1230987
+      PROJECT_COLUMN_ID: 123123123
     ports:
       - 8080:80
