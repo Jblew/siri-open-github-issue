@@ -23,6 +23,7 @@ export class HttpBackendServer {
       this.config.routerBase,
       endpointPath
     );
+    console.log(`Listening to ${endpointPathResolved}`);
     this.app.get(endpointPathResolved, async (req, res) => {
       try {
         const result = await handler({ query: req.query });
