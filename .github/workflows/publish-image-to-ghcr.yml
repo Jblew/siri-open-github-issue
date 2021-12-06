@@ -23,11 +23,13 @@ jobs:
         include:
           - registry: github
             registry_domain: ghcr.io
+            image_name: jblew/siri-open-github-issue
           - registry: docker
             registry_domain: docker.io
+            image_name: jedrzejlewandowski/siri-open-github-issue
     env:
       REGISTRY: ${{ matrix.registry_domain }}
-      IMAGE_NAME: ${{ github.repository }}
+      IMAGE_NAME: ${{ matrix.image_name }}
 
     steps:
       - name: Checkout repository
