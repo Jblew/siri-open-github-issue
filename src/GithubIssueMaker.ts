@@ -5,15 +5,13 @@ export class GithubIssueMaker {
 
   constructor(
     private config: {
-      token: string;
+      octokit: Octokit;
       repo: string;
       owner: string;
       projectColumnId?: number;
     }
   ) {
-    this.octokit = new Octokit({
-      auth: config.token,
-    });
+    this.octokit = config.octokit;
   }
 
   async createIssue({ title }: { title: string }) {

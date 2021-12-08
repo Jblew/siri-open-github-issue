@@ -1,7 +1,10 @@
 import { HttpBackendServer } from "./HttpBackendServer";
-import { createTokenAuth } from "@octokit/auth-token";
 import { GithubIssueMaker } from "./GithubIssueMaker";
 import { envMust } from "./util";
+import endpoints from "./endpoints";
+import { Octokit } from "@octokit/rest";
+
+console.log("siri-open-github-issue");
 
 process
   .on("SIGINT", function () {
@@ -12,13 +15,20 @@ process
     console.log("\nGracefully shutting down from SIGTERM");
     process.exit(1);
   });
-console.log("siri-open-github-issue");
+
 const apiKeyForClients = envMust("APIKEY_FOR_CLIENTS");
+const token = envMust("GITHUB_TOKEN");
+const owner = envMust("OWNER");
+const repo = envMust("REPO");
+const projectColumnId = parseInt(envMust("PROJECT_COLUMN_ID"));
+const octokit = new Octokit({
+  auth: token,
+});
 const issueMaker = new GithubIssueMaker({
-  owner: envMust("OWNER"),
-  repo: envMust("REPO"),
-  token: envMust("GITHUB_TOKEN"),
-  projectColumnId: parseInt(envMust("PROJECT_COLUMN_ID")),
+  owner,
+  repo,
+  projectColumnId,
+  octokit,
 });
 const server = new HttpBackendServer({
   port: parseInt(process.env.PORT || "80"),
@@ -34,4 +44,5 @@ server.get(`/open-issue`, async ({ query }) => {
   const { number } = await issueMaker.createIssue({ title: message });
   return `Created issue ${message} with number ${number}`;
 });
+endpoints({ server, github: octokit });
 server.listen();
