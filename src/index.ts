@@ -8,7 +8,7 @@ console.log("siri-open-github-issue");
 
 process
   .on("SIGINT", function () {
-    console.log("\nGracefully shutting down from SIGINT (Ctrl-C)");
+    console.log("\nGracefully shutting down from SIGINT");
     process.exit(1);
   })
   .on("SIGTERM", function () {
@@ -34,11 +34,9 @@ const server = new HttpBackendServer({
   port: parseInt(process.env.PORT || "80"),
   hostname: process.env.HOST || "0.0.0.0",
   routerBase: process.env.ROUTER_BASE || "",
+  apiKey: apiKeyForClients,
 });
 server.get(`/open-issue`, async ({ query }) => {
-  const apiKey = query.key;
-  if (!apiKey) return "Missing key";
-  else if (apiKey !== apiKeyForClients) return "Invalid api key";
   const message = query.message;
   if (!message) return "Missing message";
   const { number } = await issueMaker.createIssue({ title: message });
